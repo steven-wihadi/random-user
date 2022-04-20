@@ -1,8 +1,8 @@
 import { useState } from 'react';
+import { User } from '../../../../@core/entity/User.entity';
 import './Table.component.scss';
 import {
   TablePropstype,
-  DataSource,
   ColumnName,
   Order
 } from './Table.propstype';
@@ -15,8 +15,8 @@ export default function Table(props: TablePropstype) {
     { label: 'Gender', value: 'gender' },
     { label: 'Registered Date', value: 'registered_date' },
   ];
-  const [order, setOrder] = useState('ascend');
-  const [orderColumn, setOrderColumn] = useState('name');
+  const [order, setOrder] = useState('');
+  const [orderColumn, setOrderColumn] = useState('');
 
   const Triangle = (props: any) => {
     const className = props.type + (props.active ? ' active' : '');
@@ -92,7 +92,7 @@ export default function Table(props: TablePropstype) {
         </thead>
         <tbody>
           {
-            props?.dataSource.map((data: DataSource, index: number) => 
+            props?.dataSource.map((data: User, index: number) => 
               <tr key={data.username + index}>
                 <td className={orderColumn === 'username' ? 'active' : ''}>{data.username}</td>
                 <td className={orderColumn === 'name' ? 'active' : ''}>{data.name}</td>

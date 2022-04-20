@@ -3,41 +3,85 @@ import Breadcrumb from './components/breadcrumb/Breadcrumb.component';
 import Filter from './components/filter/Filter.component';
 import Table from './components/table/Table.component';
 import {
-  DataSource,
   Order,
   ColumnName
 } from './components/table/Table.propstype';
+import { useEffect, useState } from 'react';
+import SamplePageImpl from './SamplePage.impl';
+import { GetListUserDTO } from '../../@core/interface/GetListUser.interface';
+
+var getListUserParams: GetListUserDTO = {
+  page: 1,
+  results: 10,
+}
 
 export default function SamplePage() {
-  const mocData: DataSource[] = [
-    {
-      username: 'asd 1',
-      name: 'asd 1',
-      email: 'asd 1',
-      gender: 'asd 1',
-      registered_date: 'asd 1'
-    }
-  ];
+  const usecase = new SamplePageImpl();
+  const [dataSource, setDataSource] = useState([]);
 
-  const onClickSearch = (keyword: string) => {
-    console.log('keyword: ', keyword);
+  const getList = (procedure: string = '') => {
+    if (!procedure) {
+      getListUserParams.page = 1;
+    }
+    
+    usecase.getListUser(getListUserParams)
+      .then((res: any) => {
+        if (procedure === 'scroll') {
+          const result = dataSource.concat(res);
+          setDataSource([...result]);
+        } else {
+          const result = [].concat(res);
+          setDataSource([...result]);
+        }
+      });
   }
 
-  const  onChangeSelect = (value: string) => {
-    console.log('value: ', value);
+  useEffect(() => {
+    getListUserParams = {
+      page: 1,
+      results: 10,
+    };
+    getList();
+  }, []);
+
+  const onClickSearch = (keyword: string) => {
+    if (keyword) {
+      getListUserParams.keyword = keyword;
+    } else {
+      delete getListUserParams.keyword;
+    }
+    getList();
+  }
+
+  const  onChangeSelect = (value: any) => {
+    if (value) {
+      getListUserParams.gender = value;
+    } else {
+      delete getListUserParams.gender;
+    }
+    getList();
   }
 
   const onClickResetFilter = () => {
-    console.log('==onClickResetFilter');
+    delete getListUserParams.keyword;
+    delete getListUserParams.gender;
+    getList();
   }
 
   const onSort = (columnName: ColumnName, order: Order) => {
-    console.log('===columnName: ', columnName);
-    console.log('===order: ', order);
+    if (order) {
+      getListUserParams.sortBy = columnName;
+      getListUserParams.sortOrder = order;
+    } else {
+      delete getListUserParams.sortBy;
+      delete  getListUserParams.sortOrder;
+    }
+    getList();
   }
 
   const onInfiniteScroll = () => {
-    console.log('==viola');
+    getListUserParams.page += 1;
+    getList('scroll');
   }
   return (
     <div className="sample-page-container">
@@ -51,7 +95,7 @@ export default function SamplePage() {
         onResetFilter={onClickResetFilter}
       />
       <Table
-        dataSource={mocData}
+        dataSource={dataSource}
         onSort={onSort}
         onInfiniteScroll={onInfiniteScroll}
       />

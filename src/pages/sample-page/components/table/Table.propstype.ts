@@ -1,10 +1,5 @@
-export interface DataSource {
-  username: string;
-  name: string;
-  email: string;
-  gender: string;
-  registered_date: string;
-}
+import { User } from "../../../../@core/entity/User.entity";
+
 export type ColumnName =
   'username'
   | 'name'
@@ -17,7 +12,7 @@ export type Order =
   | 'descend'
   | '';
 export interface TablePropstype {
-  dataSource: DataSource[];
+  dataSource: User[];
   onSort?: (columnName: ColumnName, order: Order) => void;
   onInfiniteScroll?: () => void;
 }

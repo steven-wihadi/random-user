@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import './Filter.component.scss';
 import {
   FilterPropstype
@@ -7,12 +7,12 @@ import {
 export default function Filter(props: FilterPropstype) {
 
   const genderOptions = [
-    { label: 'All', value: 'all' },
+    { label: 'All', value: '' },
     { label: 'Male', value: 'male' },
     { label: 'Female', value: 'female' },
   ];
   const [keyword, setKeyword] = useState('');
-  const [gender, setGender] = useState('all');
+  const [gender, setGender] = useState('');
 
   const onClickSearch = () => {
     if (props?.onClickSearch) {
@@ -28,7 +28,7 @@ export default function Filter(props: FilterPropstype) {
   }
 
   const onClickResetFilter = () => {
-    setGender('all');
+    setGender('');
     setKeyword('');
     if (props?.onResetFilter) {
       props.onResetFilter();
