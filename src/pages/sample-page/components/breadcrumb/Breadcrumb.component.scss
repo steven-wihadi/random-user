@@ -1,0 +1,12 @@
+.breadcrumb {
+  span {
+    color: gray;
+    font-size: 14px;
+    margin-right: 8px;
+
+    &.active-page {
+      color: #525353 !important;
+      font-weight: 600;
+    }
+  }
+}

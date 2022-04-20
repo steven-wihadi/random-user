@@ -1,0 +1,53 @@
+.filter-container {
+	display: flex;
+
+  .filter-section {
+    margin-right: 8px;
+  }
+
+  .flex-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 2px;
+    color: #525353;
+  }
+
+  input {
+    padding: 4px 8px;
+    border-radius: 2px 0px 0px 2px;
+    font-size: 16px;
+    border: 1px solid #cbcbcb;
+  }
+
+  select {
+    width: 180px;
+    font-size: 16px;
+    border: 1px solid #cbcbcb;
+    padding: 4px 8px;
+    background-color: transparent;
+  }
+
+  .search-button {
+    background-color: #1890ff;
+    color: white;
+    border: unset;
+    padding: 6px 8px;
+    font-size: 14px;
+  }
+
+  .reset-button {
+    font-size: 14px;
+    padding: 2px 12px;
+    height: 29px;
+    background-color: transparent;
+    border: 1px solid #cbcbcb;
+    margin-top: 23px;
+    color: #525353;
+    cursor: pointer;
+  }
+}
