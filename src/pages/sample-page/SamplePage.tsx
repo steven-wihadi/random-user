@@ -10,31 +10,15 @@ import { useEffect, useState } from 'react';
 import SamplePageImpl from './SamplePage.impl';
 import { GetListUserDTO } from '../../@core/interface/GetListUser.interface';
 
-var getListUserParams: GetListUserDTO = {
+let getListUserParams: GetListUserDTO = {
   page: 1,
   results: 10,
-}
+};
+let isFetch = false;
 
 export default function SamplePage() {
   const usecase = new SamplePageImpl();
   const [dataSource, setDataSource] = useState([]);
-
-  const getList = (procedure: string = '') => {
-    if (!procedure) {
-      getListUserParams.page = 1;
-    }
-    
-    usecase.getListUser(getListUserParams)
-      .then((res: any) => {
-        if (procedure === 'scroll') {
-          const result = dataSource.concat(res);
-          setDataSource([...result]);
-        } else {
-          const result = [].concat(res);
-          setDataSource([...result]);
-        }
-      });
-  }
 
   useEffect(() => {
     getListUserParams = {
@@ -43,6 +27,30 @@ export default function SamplePage() {
     };
     getList();
   }, []);
+
+  const getList = (procedure: string = '') => {
+    if (!procedure) {
+      getListUserParams.page = 1;
+    }
+    
+    if (!isFetch) {
+      isFetch = true;
+      usecase.getListUser(getListUserParams)
+        .then((res: any) => {
+          isFetch = false;
+          if (procedure === 'scroll') {
+            const result = dataSource.concat(res);
+            setDataSource([...result]);
+          } else {
+            const result = [].concat(res);
+            setDataSource([...result]);
+          }
+        }, err => {
+          isFetch = false;
+          console.error('Got wrong: ', err);
+        });
+    }
+  }
 
   const onClickSearch = (keyword: string) => {
     if (keyword) {
