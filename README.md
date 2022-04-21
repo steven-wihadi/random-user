@@ -1,46 +1,134 @@
-# Getting Started with Create React App
+# EXAMPLE WEB
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Example Web is a web to view list of random user. There's a couple of features like:
+- Filter by gender
+- Search a user
+- Sort ascending or descending on all field column
 
-## Available Scripts
+Live site can visit at:
+https://sample-host-5329e.web.app/
 
-In the project directory, you can run:
+# PREFACE
 
-### `npm start`
+This Project created by `npx create-react-app my-app --template typescript`, so this is a simple project using react.js, and typescript. This Project use the clean architecture design pattern that I try to created by my self, so this is maybe not perfect but it's enough to separate concern. If you have an idea to make it better please notice me. I'm still learn, and I ready to hear you. 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# HOW TO START IN LOCAL
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- use `npm` to install dependencies, or run this command on your terminal `npm install`.
+- and run `npm start` to start the local.
 
-### `npm test`
+# FILE STRUCTURE (inside src)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+├── @core
+│    ├── entity         -> place of all object and type model
+│    ├── interactor    	-> place of all usecase interactor, also the mock data if the interaction is a API request
+│    ├── interface      -> place of all DTO and response object model
+│    ├── mapper         -> place of all adapter function base on interactor
+│    └── usecase       	-> place of all usecase abstract class for each page
+├── pages               -> place of all view/page
+├── service            	-> place of all service
+```
 
-### `npm run build`
+# CREATE NEW COMPONENT
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+If the component use in many pages you can create `components` folder inside src, but if the component just use in the 1 page, please create `components` folder inside `pages/<page-name>` and follow the structures bellow.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+├── components
+    └── new-component
+        ├── NewComponent.tsx            -> for view of component
+        ├── NewComponent.interface.ts   -> for data model of component
+        ├── NewComponent.scss           -> for css rule of component
+		└── README.md                   -> for documentation of component
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+or for more complex component need more view
 
-### `npm run eject`
+```
+├── components
+    └── custom-select
+        ├── CustomSelect.tsx                -> main view of component
+        ├── SelectOption.tsx                -> another separate component from main
+        ├── MultiSelectOption.tsx           -> another separate component from main
+        ├── CustomSelect.interface.ts       -> for data model of component
+        ├── NewComponent.scss               -> for css rule of component
+        └── README.md                       -> for documentation of component
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+# CREATE NEW PAGE
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Bellow is the place to create new page.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```
+├── pages
+    └── page-folder-name
+        └── NewPage.tsx -> for page view
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+# CREATE PAGE INTERACTION
 
-## Learn More
+#### Step 1
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+You must create abstract class of usecase for your new page. Bellow is the place to create abstract usecase.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+├── @core
+    └── usecase
+        └── GetLeaveType.usecase.ts -> containt abstract class, and function that must implement in the page. Don't forget give model in each input/ouput of abraction function.
+```
+
+#### Step 2 (create interactor)
+
+You need to create interactor to execute and fulfill abstract usecase. Bellow is how to create interactor.
+
+- First step you must create interface file for put data model of your interactor. Bellow is the place to create interactor interface.
+
+```
+├── @core
+    ├── interface
+        └── NewInteractor.interface.ts     -> data model of interactor
+```
+
+- Second step create the interactor file.
+
+```
+    ├── @core
+    ├── interactor
+        └── NewInteractor.interactor.ts       -> it's contain export default function, and export const if want to make mock of API request
+```
+
+- Third step is create a mapper, if your interactor no need convert data to fulfill view structure data, you can skip this step.
+
+```
+    ├── @core
+    ├── mapper
+        └── NewInteractor.mapper.ts       -> it's contain export function to convert data
+```
+
+#### Step 3
+
+Create usecase implementation file.
+
+```
+├── pages
+    └── NewPage.impl.ts -> this file contain class that implement of abstract usecase class in step 1, also convert data, and more logic like call 2 or more interactor and combine it to fulfill needs data in view
+```
+
+After that you can create new object of it, and called it inside view page (refer to step 1).
+
+# HOW TO DEPLOY
+
+This Project use firebase hosting, because it simple. Bellow how to deploy this project.
+
+#### Step 1
+
+Login firebase in the terminal with execute command `fireabse login`.
+
+#### Step 2
+
+Build react project with execute command `npm run build`.
+
+#### Step 3
+
+Run command `firebase deploy`, after execute complete you will get the Hosting URL.
